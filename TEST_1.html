@@ -3,273 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TEF Canada - Compréhension Orale - Test 1</title>
+    <title>TEF Canada - Test 1</title>
     <style>
-        :root {
-            --primary: #2563eb;
-            --primary-hover: #1d4ed8;
-            --success: #059669;
-            --error: #dc2626;
-            --bg: #f8fafc;
-            --card: #ffffff;
-            --text: #1e293b;
-            --text-light: #64748b;
-            --border: #e2e8f0;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        }
-
         body {
-            background-color: var(--bg);
-            color: var(--text);
-            line-height: 1.5;
+            background-color: #f8fafc;
+            color: #1e293b;
+            font-family: Arial, sans-serif;
             padding: 20px;
+            margin: 0;
         }
-
         .container {
             max-width: 600px;
             margin: 0 auto;
         }
-
         .header {
-            margin-bottom: 24px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            margin-bottom: 20px;
         }
-
         .btn-back {
-            display: inline-flex;
-            align-items: center;
-            color: var(--text-light);
+            color: #64748b;
             text-decoration: none;
             font-size: 14px;
-            gap: 4px;
         }
-
         .card {
-            background: var(--card);
-            border: 1px solid var(--border);
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
             border-radius: 12px;
             padding: 24px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
             margin-bottom: 20px;
         }
-
         .progress-bar {
             height: 6px;
-            background: var(--border);
+            background: #e2e8f0;
             border-radius: 3px;
             margin-bottom: 20px;
-            overflow: hidden;
         }
-
         .progress-fill {
             height: 100%;
-            background: var(--primary);
+            background: #2563eb;
             width: 0%;
-            transition: width 0.3s;
         }
-
         .meta {
             font-size: 13px;
-            color: var(--text-light);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
+            color: #64748b;
             margin-bottom: 8px;
-            display: flex;
-            justify-content: space-between;
         }
-
         .audio-section {
             background: #f1f5f9;
             padding: 16px;
             border-radius: 8px;
             margin-bottom: 24px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 12px;
+            text-align: center;
         }
-
-        .audio-controls {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            width: 100%;
-        }
-
         .btn-play {
-            background: var(--primary);
+            background: #2563eb;
             color: white;
             border: none;
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
+            padding: 10px 20px;
+            border-radius: 20px;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            font-size: 16px;
+            margin-bottom: 10px;
         }
-
-        .btn-play:hover {
-            background: var(--primary-hover);
-        }
-
-        .audio-progress {
-            flex: 1;
-            height: 6px;
-            background: #cbd5e1;
-            border-radius: 3px;
-            position: relative;
-            cursor: pointer;
-        }
-
-        .audio-progress-fill {
-            height: 100%;
-            background: var(--primary);
-            width: 0%;
-            border-radius: 3px;
-        }
-
         .time-display {
             font-size: 12px;
-            color: var(--text-light);
-            font-variant-numeric: tabular-nums;
+            color: #64748b;
+            display: block;
+            margin-top: 5px;
         }
-
-        .listen-count {
-            font-size: 12px;
-            color: var(--text-light);
-            font-weight: 500;
-        }
-
         .question-text {
             font-size: 18px;
-            font-weight: 600;
+            font-weight: bold;
             margin-bottom: 20px;
         }
-
-        .options-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
         .option-item {
-            border: 1px solid var(--border);
+            border: 1px solid #e2e8f0;
             border-radius: 8px;
             padding: 14px 16px;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 15px;
-            transition: all 0.2s;
+            margin-bottom: 12px;
             background: white;
         }
-
-        .option-item:hover:not(.disabled) {
-            background: #f8fafc;
-            border-color: #cbd5e1;
-        }
-
         .option-item.selected {
-            border-color: var(--primary);
+            border-color: #2563eb;
             background: #eff6ff;
         }
-
         .option-item.correct {
-            border-color: var(--success);
+            border-color: #059669;
             background: #ecfdf5;
             color: #047857;
         }
-
         .option-item.wrong {
-            border-color: var(--error);
+            border-color: #dc2626;
             background: #fef2f2;
             color: #b91c1c;
         }
-
-        .option-item.disabled {
-            cursor: not-allowed;
-        }
-
-        .radio-circle {
-            width: 20px;
-            height: 20px;
-            border: 2px solid #cbd5e1;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
-        .option-item.selected .radio-circle {
-            border-color: var(--primary);
-        }
-
-        .option-item.selected .radio-circle::after {
-            content: "";
-            width: 10px;
-            height: 10px;
-            background: var(--primary);
-            border-radius: 50%;
-        }
-
         .btn-nav {
             width: 100%;
-            background: var(--text);
+            background: #1e293b;
             color: white;
             border: none;
             padding: 14px;
             border-radius: 8px;
             font-size: 16px;
-            font-weight: 500;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            margin-top: 20px;
         }
-
-        .btn-nav:hover {
-            opacity: 0.9;
-        }
-
         .btn-nav:disabled {
-            background: var(--border);
-            color: var(--text-light);
+            background: #e2e8f0;
+            color: #64748b;
             cursor: not-allowed;
-        }
-
-        .result-screen {
-            text-align: center;
-            padding: 40px 20px;
-        }
-
-        .result-score {
-            font-size: 48px;
-            font-weight: 700;
-            color: var(--primary);
-            margin: 16px 0;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <a href="index.html" class="btn-back">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-                Retour
-            </a>
+            <a href="index.html" class="btn-back">◀ Retour</a>
         </div>
 
         <div id="quiz-container">
@@ -278,45 +126,35 @@
             </div>
 
             <div class="meta">
-                <span id="question-number">Question 1/4</span>
+                <span id="question-number">Question 1/1</span> | 
                 <span id="section-title">Section A</span>
             </div>
 
             <div class="audio-section">
-                <div class="audio-controls">
-                    <button id="btn-play" class="btn-play">
-                        <svg id="play-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-                        <svg id="pause-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="display:none;"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
-                    </button>
-                    <div id="audio-progress" class="audio-progress">
-                        <div id="audio-progress-fill" class="audio-progress-fill"></div>
-                    </div>
-                    <span id="time-display" class="time-display">0:00 / 0:00</span>
-                </div>
-                <div id="listen-count" class="listen-count">Écoutes : 0 / 2</div>
+                <button id="btn-play" class="btn-play">▶ Écouter</button>
+                <div id="listen-count" style="font-size: 12px; color: #64748b;">Écoutes : 0 / 2</div>
+                <span id="time-display" class="time-display">0:00 / 0:00</span>
             </div>
 
             <div class="card">
                 <div id="question-text" class="question-text"></div>
-                <div id="options-list" class="options-list"></div>
+                <div id="options-list"></div>
             </div>
 
-            <button id="btn-submit" class="btn-nav" disabled>
-                Valider
-            </button>
+            <button id="btn-submit" class="btn-nav" disabled>Valider</button>
         </div>
 
         <div id="result-container" style="display: none;">
-            <div class="card result-screen">
+            <div class="card" style="text-align: center;">
                 <h2>Test Terminé !</h2>
-                <div id="result-score" class="result-score">0 / 0</div>
-                <p id="result-text" style="color: var(--text-light); margin-bottom: 30px;"></p>
+                <div id="result-score" style="font-size: 48px; font-weight: bold; color: #2563eb; margin: 20px 0;">0 / 0</div>
                 <button onclick="location.reload()" class="btn-nav">Recommencer</button>
             </div>
         </div>
     </div>
 
     <script>
+        // Eski Safari için tamamen eski tip Array ve Object yapısı
         var DATA = [
             {
                 id: 1,
@@ -329,7 +167,7 @@
                     "Reporter votre test à une autre date."
                 ],
                 correctAnswer: 0,
-                audio: "data:audio/mpeg;base64,SUQzBAAAAAAAI1RSTRMAAAALAAADbXAzZ2FpbgBQaW5nAAAAAAA=" // Örnek sessiz/boş veri
+                audio: "data:audio/mpeg;base64,SUQzBAAAAAAAI1RSTRMAAAALAAADbXAzZ2FpbgBQaW5nAAAAAAA="
             }
         ];
 
@@ -340,9 +178,9 @@
         var listenCount = 0;
         var maxListens = 2;
 
+        // Audio elementini HTML5 standart yöntemiyle oluşturuyoruz
         var audio = new Audio();
 
-        // Elementleri Seçme
         var elProgressFill = document.getElementById('progress-fill');
         var elQuestionNumber = document.getElementById('question-number');
         var elSectionTitle = document.getElementById('section-title');
@@ -350,16 +188,11 @@
         var elOptionsList = document.getElementById('options-list');
         var elBtnSubmit = document.getElementById('btn-submit');
         var elBtnPlay = document.getElementById('btn-play');
-        var elPlayIcon = document.getElementById('play-icon');
-        var elPauseIcon = document.getElementById('pause-icon');
-        var elAudioProgress = document.getElementById('audio-progress');
-        var elAudioProgressFill = document.getElementById('audio-progress-fill');
         var elTimeDisplay = document.getElementById('time-display');
         var elListenCount = document.getElementById('listen-count');
         var elQuizContainer = document.getElementById('quiz-container');
         var elResultContainer = document.getElementById('result-container');
         var elResultScore = document.getElementById('result-score');
-        var elResultText = document.getElementById('result-text');
 
         function initQuestion() {
             var currentData = DATA[currentQuestionIndex];
@@ -369,23 +202,18 @@
             isAnswered = false;
             listenCount = 0;
 
-            // Audio Güncelleme
             audio.src = currentData.audio;
             audio.load();
 
-            // UI Güncelleme
             elProgressFill.style.width = ((currentQuestionIndex / DATA.length) * 100) + '%';
-            elQuestionNumber.innerText = "Question " + (currentQuestionIndex + 1) + " / " + DATA.length;
-            elSectionTitle.innerText = currentData.section;
-            elQuestionText.innerText = currentData.question;
-            elListenCount.innerText = "Écoutes : 0 / " + maxListens;
-            elBtnSubmit.innerText = "Valider";
+            elQuestionNumber.innerHTML = "Question " + (currentQuestionIndex + 1) + " / " + DATA.length;
+            elSectionTitle.innerHTML = currentData.section;
+            elQuestionText.innerHTML = currentData.question;
+            elListenCount.innerHTML = "Écoutes : 0 / " + maxListens;
+            elBtnSubmit.innerHTML = "Valider";
             elBtnSubmit.disabled = true;
-
-            elPlayIcon.style.display = 'block';
-            elPauseIcon.style.display = 'none';
-            elAudioProgressFill.style.width = '0%';
-            elTimeDisplay.innerText = "0:00 / 0:00";
+            elBtnPlay.innerHTML = "▶ Écouter";
+            elTimeDisplay.innerHTML = "0:00 / 0:00";
 
             renderOptions(currentData);
         }
@@ -393,22 +221,14 @@
         function renderOptions(currentData) {
             elOptionsList.innerHTML = '';
             for (var i = 0; i < currentData.options.length; i++) {
-                var optionText = currentData.options[i];
                 var item = document.createElement('div');
                 item.className = 'option-item';
                 item.setAttribute('data-index', i);
-
-                var circle = document.createElement('div');
-                circle.className = 'radio-circle';
-                item.appendChild(circle);
-
-                var textSpan = document.createElement('span');
-                textSpan.innerText = optionText;
-                item.appendChild(textSpan);
+                item.innerHTML = currentData.options[i];
 
                 item.onclick = function() {
                     if (isAnswered) return;
-                    var idx = parseInt(this.getAttribute('data-index'));
+                    var idx = parseInt(this.getAttribute('data-index'), 10);
                     selectOption(idx);
                 };
 
@@ -418,32 +238,30 @@
 
         function selectOption(index) {
             selectedOptionIndex = index;
-            var items = elOptionsList.querySelectorAll('.option-item');
+            var items = elOptionsList.getElementsByClassName('option-item');
             for (var i = 0; i < items.length; i++) {
-                items[i].classList.remove('selected');
+                items[i].className = 'option-item';
             }
-            items[index].classList.add('selected');
+            items[index].className = 'option-item selected';
             elBtnSubmit.disabled = false;
         }
 
         elBtnSubmit.onclick = function() {
             if (!isAnswered) {
-                // Cevap Kontrolü
                 isAnswered = true;
                 audio.pause();
-                elPlayIcon.style.display = 'block';
-                elPauseIcon.style.display = 'none';
+                elBtnPlay.innerHTML = "▶ Écouter";
 
                 var currentData = DATA[currentQuestionIndex];
-                var items = elOptionsList.querySelectorAll('.option-item');
+                var items = elOptionsList.getElementsByClassName('option-item');
 
                 for (var i = 0; i < items.length; i++) {
-                    items[i].classList.add('disabled');
                     if (i === currentData.correctAnswer) {
-                        items[i].classList.add('correct');
-                    }
-                    if (i === selectedOptionIndex && selectedOptionIndex !== currentData.correctAnswer) {
-                        items[i].classList.add('wrong');
+                        items[i].className = 'option-item correct';
+                    } else if (i === selectedOptionIndex) {
+                        items[i].className = 'option-item wrong';
+                    } else {
+                        items[i].className = 'option-item';
                     }
                 }
 
@@ -452,12 +270,11 @@
                 }
 
                 if (currentQuestionIndex === DATA.length - 1) {
-                    elBtnSubmit.innerText = "Voir les résultats";
+                    elBtnSubmit.innerHTML = "Voir les résultats";
                 } else {
-                    elBtnSubmit.innerText = "Suivant";
+                    elBtnSubmit.innerHTML = "Suivant";
                 }
             } else {
-                // Sonraki Soru veya Sonuç
                 if (currentQuestionIndex < DATA.length - 1) {
                     currentQuestionIndex++;
                     initQuestion();
@@ -467,54 +284,39 @@
             }
         };
 
-        // Audio Etkinlikleri
         elBtnPlay.onclick = function() {
             if (audio.paused) {
                 if (listenCount >= maxListens && audio.currentTime === 0) {
-                    alert("Vous avez atteint la limite d'écoutes pour cette question.");
+                    alert("Limite d'écoutes atteinte.");
                     return;
                 }
                 audio.play();
-                elPlayIcon.style.display = 'none';
-                elPauseIcon.style.display = 'block';
+                elBtnPlay.innerHTML = "❚❚ Pause";
             } else {
                 audio.pause();
-                elPlayIcon.style.display = 'block';
-                elPauseIcon.style.display = 'none';
+                elBtnPlay.innerHTML = "▶ Écouter";
             }
         };
 
         audio.onplay = function() {
             if (audio.currentTime === 0) {
                 listenCount++;
-                elListenCount.innerText = "Écoutes : " + listenCount + " / " + maxListens;
+                elListenCount.innerHTML = "Écoutes : " + listenCount + " / " + maxListens;
             }
         };
 
         audio.onpause = function() {
-            elPlayIcon.style.display = 'block';
-            elPauseIcon.style.display = 'none';
+            elBtnPlay.innerHTML = "▶ Écouter";
         };
 
         audio.onended = function() {
-            elPlayIcon.style.display = 'block';
-            elPauseIcon.style.display = 'none';
-            elAudioProgressFill.style.width = '100%';
+            elBtnPlay.innerHTML = "▶ Écouter";
         };
 
         audio.ontimeupdate = function() {
             if (audio.duration) {
-                var pct = (audio.currentTime / audio.duration) * 100;
-                elAudioProgressFill.style.width = pct + '%';
-                elTimeDisplay.innerText = formatTime(audio.currentTime) + " / " + formatTime(audio.duration);
+                elTimeDisplay.innerHTML = formatTime(audio.currentTime) + " / " + formatTime(audio.duration);
             }
-        };
-
-        elAudioProgress.onclick = function(e) {
-            if (!audio.duration) return;
-            var rect = elAudioProgress.getBoundingClientRect();
-            var pct = (e.clientX - rect.left) / rect.width;
-            audio.currentTime = pct * audio.duration;
         };
 
         function formatTime(secs) {
@@ -526,16 +328,10 @@
         function showResults() {
             elQuizContainer.style.display = 'none';
             elResultContainer.style.display = 'block';
-            elResultScore.innerText = score + " / " + DATA.length;
-            
-            var pct = (score / DATA.length) * 100;
-            if (pct === 100) elResultText.innerText = "Excellent ! Un sans-faute !";
-            else if (pct >= 75) elResultText.innerText = "Très bien ! Vous êtes sur la bonne voie.";
-            else if (pct >= 50) elResultText.innerText = "Pas mal, mais continuez à vous entraîner.";
-            else elResultText.innerText = "Besoin d'entraînement. Ne découragez pas !";
+            elResultScore.innerHTML = score + " / " + DATA.length;
         }
 
-        // Başlat
+        // İlk soruyu yükle
         initQuestion();
     </script>
 </body>
