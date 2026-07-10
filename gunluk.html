@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Mon Journal — Günlük &amp; Düzeltme</title>
+<style>
+/* iOS 9 Safari uyumlu: CSS degiskeni yok, grid yok, basit kurallar */
+* { -webkit-box-sizing: border-box; box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  font-family: -apple-system, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  background: #f7f6f2;
+  color: #1c2733;
+  font-size: 16px;
+  line-height: 1.5;
+}
+.wrap { max-width: 700px; margin: 0 auto; padding: 14px 14px 60px 14px; }
+
+header { padding: 18px 2px 14px 2px; border-bottom: 3px solid #1c3a5e; margin-bottom: 16px; }
+header h1 { font-family: Georgia, "Times New Roman", serif; font-size: 26px; color: #1c3a5e; font-weight: normal; }
+header p { font-size: 13px; color: #6b7684; margin-top: 3px; }
+
+.card { background: #ffffff; border: 1px solid #dcd8cf; border-radius: 6px; padding: 14px; margin-bottom: 14px; }
+.card h2 { font-size: 15px; color: #1c3a5e; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+
+textarea {
+  width: 100%; min-height: 180px; padding: 10px;
+  font-family: Georgia, serif; font-size: 17px; line-height: 1.6;
+  border: 1px solid #c9c4b8; border-radius: 4px; background: #fffdf8; color: #1c2733;
+  -webkit-appearance: none;
+}
+textarea:focus { outline: none; border-color: #1c3a5e; }
+#promptBox, #cevapBox { min-height: 110px; font-family: -apple-system, Helvetica, sans-serif; font-size: 13px; }
+
+.sayac { font-size: 12px; color: #6b7684; text-align: right; margin-top: 4px; }
+
+.btn {
+  display: block; width: 100%; padding: 13px; margin-top: 10px;
+  font-size: 16px; font-weight: bold; border: none; border-radius: 5px;
+  background: #1c3a5e; color: #ffffff; -webkit-appearance: none; cursor: pointer;
+}
+.btn:active { background: #14293f; }
+.btn.ikincil { background: #ffffff; color: #1c3a5e; border: 2px solid #1c3a5e; }
+.btn.kucuk { padding: 8px; font-size: 14px; font-weight: normal; }
+.btn[disabled] { background: #9aa5b1; }
+
+.sekme { overflow: hidden; margin-bottom: 12px; }
+.sekme button {
+  float: left; width: 50%; padding: 10px; font-size: 14px; border: 1px solid #1c3a5e;
+  background: #ffffff; color: #1c3a5e; -webkit-appearance: none; cursor: pointer;
+}
+.sekme button.aktif { background: #1c3a5e; color: #ffffff; }
+.sekme button:first-child { border-radius: 5px 0 0 5px; }
+.sekme button:last-child { border-radius: 0 5px 5px 0; border-left: none; }
+
+.gizli { display: none; }
+
+.durum { padding: 10px; border-radius: 4px; font-size: 14px; margin-top: 10px; }
+.durum.bekliyor { background: #fff6dd; border: 1px solid #e5d28f; color: #7a6410; }
+.durum.hata { background: #fdecec; border: 1px solid #e8b4b4; color: #8f2323; }
+
+/* Düzeltilmis metin — kirmizi kalem gorunumu */
+#sonuc { }
+.duzeltme-metin {
+  font-family: Georgia, serif; font-size: 17px; line-height: 1.9;
+  background: #fffdf8; border: 1px solid #c9c4b8; border-radius: 4px; padding: 12px;
+}
+.err {
+  color: #b3131a; font-weight: bold;
+  border-bottom: 2px solid #b3131a;
+  background: #fdeeee;
+}
+.hata-liste { margin-top: 12px; }
+.hata-item { border-left: 4px solid #b3131a; background: #ffffff; padding: 8px 10px; margin-bottom: 8px; border-radius: 0 4px 4px 0; border-top: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee; }
+.hata-item .yanlis { color: #b3131a; text-decoration: line-through; }
+.hata-item .dogru { color: #1a7a2e; font-weight: bold; }
+.hata-item .acik { font-size: 14px; color: #4a5460; margin-top: 3px; }
+.yorum-kutu { margin-top: 12px; background: #eef3f9; border: 1px solid #c3d4e8; border-radius: 4px; padding: 10px; font-size: 15px; }
+
+.gecmis-item { padding: 9px 4px; border-bottom: 1px solid #e5e1d8; font-size: 14px; }
+.gecmis-item .tarih { color: #6b7684; font-size: 12px; }
+.gecmis-item a { color: #1c3a5e; }
+
+input[type=password], input[type=text] {
+  width: 100%; padding: 10px; font-size: 15px; border: 1px solid #c9c4b8; border-radius: 4px; -webkit-appearance: none;
+}
+.notlar { font-size: 13px; color: #6b7684; margin-top: 8px; }
+.ayar-baslik { font-size: 13px; color: #1c3a5e; margin-top: 10px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <a href="index.html" style="font-size:13px;color:#1c3a5e;text-decoration:none">&larr; Ana sayfa</a>
+  <h1>Mon Journal</h1>
+  <p>Fransızca günlük yaz &middot; yapay zekâ düzeltsin &middot; TEF Canada NCLC 5</p>
+</header>
+
+<!-- GÜNLÜK YAZMA -->
+<div class="card">
+  <h2>Bugünün günlüğü</h2>
+  <textarea id="gunluk" placeholder="Aujourd'hui, je... (Fransızca günlüğünü buraya yaz)"></textarea>
+  <div class="sayac"><span id="kelime">0</span> kelime</div>
+
+  <div class="sekme">
+    <button id="sekmeApi" class="aktif" onclick="sekmeSec('api')">API ile kontrol</button>
+    <button id="sekmeManuel" onclick="sekmeSec('manuel')">Kopyala / Yapıştır</button>
+  </div>
+
+  <!-- API MODU -->
+  <div id="modApi">
+    <button class="btn" id="btnKontrol" onclick="apiKontrol()">Kontrol et</button>
+    <div id="durumApi"></div>
+    <div class="ayar-baslik">API anahtarı (bir kez gir, cihazda saklanır):</div>
+    <input type="password" id="apikey" placeholder="sk-ant-...">
+    <button class="btn ikincil kucuk" onclick="anahtarKaydet()">Anahtarı kaydet</button>
+    <div class="notlar">Bu mod için Anthropic API anahtarı gerekir (console.anthropic.com &mdash; Claude aboneliğinden ayrı, kullanım başına ücretli). Anahtarın yoksa yandaki &ldquo;Kopyala / Yapıştır&rdquo; modu ücretsiz çalışır.</div>
+  </div>
+
+  <!-- MANUEL MOD -->
+  <div id="modManuel" class="gizli">
+    <button class="btn" onclick="promptHazirla()">1) Promptu hazırla</button>
+    <div id="promptAlan" class="gizli">
+      <div class="notlar">Aşağıdaki metne dokun-basılı tut &rarr; Tümünü Seç &rarr; Kopyala. Sonra Claude uygulamasına yapıştır ve gönder.</div>
+      <textarea id="promptBox" readonly></textarea>
+      <div class="notlar" style="margin-top:12px;">2) Claude&rsquo;un verdiği cevabı (JSON) aşağıya yapıştır:</div>
+      <textarea id="cevapBox" placeholder='{"duzeltilmis":"...","hatalar":[...],"yorum":"..."}'></textarea>
+      <button class="btn" onclick="manuelGoster()">3) Sonucu göster</button>
+      <div id="durumManuel"></div>
+    </div>
+  </div>
+</div>
+
+<!-- SONUÇ -->
+<div class="card gizli" id="sonucKart">
+  <h2>Düzeltilmiş metin</h2>
+  <div class="notlar" style="margin-bottom:6px;">Kırmızı işaretli yerler: düzeltilen veya eklenen kısımlar.</div>
+  <div class="duzeltme-metin" id="sonucMetin"></div>
+  <div class="hata-liste" id="hataListe"></div>
+  <div class="yorum-kutu gizli" id="yorumKutu"></div>
+  <button class="btn ikincil kucuk" onclick="kaydet()">Bu günlüğü geçmişe kaydet</button>
+</div>
+
+<!-- GEÇMİŞ -->
+<div class="card">
+  <h2>Geçmiş günlükler</h2>
+  <div id="gecmisListe"><div class="notlar">Henüz kayıt yok.</div></div>
+</div>
+
+</div>
+
+<script>
+// ================= iOS 9 uyumlu: ES5, var, XHR =================
+
+var TALIMAT = "Tu es professeur de francais (FLE). L'etudiante est turque, niveau A2, elle prepare le TEF Canada (objectif NCLC 5). Corrige son journal.\n"
++ "REGLES DE SORTIE : Reponds UNIQUEMENT avec un objet JSON valide, sans balises markdown, sans texte avant ou apres. Format exact :\n"
++ "{\"duzeltilmis\":\"le texte entier corrige ; chaque segment corrige ou ajoute est entoure de guillemets francais comme ceci : \u00ABsegment corrige\u00BB\",\"hatalar\":[{\"orijinal\":\"forme fautive\",\"dogru\":\"forme correcte\",\"aciklama\":\"kisa aciklama TURKCE (dilbilgisi kurali + TEF baglaminda neden onemli)\"}],\"yorum\":\"2-3 cumlelik genel degerlendirme TURKCE : guclu yonler + NCLC 5 icin oncelikli gelisim alani\"}\n"
++ "Les explications (aciklama, yorum) doivent etre en TURC. Ne change pas le sens du texte. Corrige grammaire, conjugaison, genre, prepositions, registre. Voici le journal :\n\n";
+
+var sonOrijinal = "";
+var sonSonuc = null;
+
+// ---------- yardımcılar ----------
+function $(id){ return document.getElementById(id); }
+function esc(s){
+  return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
+function lsGet(k){ try { return window.localStorage.getItem(k); } catch(e){ return null; } }
+function lsSet(k,v){ try { window.localStorage.setItem(k,v); return true; } catch(e){ return false; } }
+
+function durum(el, tip, msg){
+  el.innerHTML = msg ? '<div class="durum '+tip+'">'+msg+'</div>' : '';
+}
+
+// ---------- kelime sayacı ----------
+function sayacGuncelle(){
+  var t = $("gunluk").value.replace(/^\s+|\s+$/g,"");
+  var n = t === "" ? 0 : t.split(/\s+/).length;
+  $("kelime").innerHTML = n;
+}
+if ($("gunluk").addEventListener) {
+  $("gunluk").addEventListener("input", sayacGuncelle, false);
+  $("gunluk").addEventListener("keyup", sayacGuncelle, false);
+}
+
+// ---------- sekmeler ----------
+function sekmeSec(m){
+  var api = (m === "api");
+  $("modApi").className = api ? "" : "gizli";
+  $("modManuel").className = api ? "gizli" : "";
+  $("sekmeApi").className = api ? "aktif" : "";
+  $("sekmeManuel").className = api ? "" : "aktif";
+}
+
+// ---------- API anahtarı ----------
+function anahtarKaydet(){
+  var k = $("apikey").value.replace(/^\s+|\s+$/g,"");
+  if (!k) { durum($("durumApi"),"hata","Anahtar boş."); return; }
+  if (lsSet("anthropic_key", k)) durum($("durumApi"),"bekliyor","Anahtar kaydedildi.");
+  else durum($("durumApi"),"hata","Bu tarayıcıda kayıt yapılamadı; anahtar sadece bu oturumda kullanılacak.");
+}
+(function(){ var k = lsGet("anthropic_key"); if (k) $("apikey").value = k; })();
+
+// ---------- API modu ----------
+function apiKontrol(){
+  var metin = $("gunluk").value.replace(/^\s+|\s+$/g,"");
+  if (!metin) { durum($("durumApi"),"hata","Önce günlüğünü yaz."); return; }
+  var key = $("apikey").value.replace(/^\s+|\s+$/g,"") || lsGet("anthropic_key");
+  if (!key) { durum($("durumApi"),"hata","API anahtarı gerekli. Anahtarın yoksa Kopyala/Yapıştır modunu kullan."); return; }
+
+  sonOrijinal = metin;
+  $("btnKontrol").disabled = true;
+  durum($("durumApi"),"bekliyor","Kontrol ediliyor... (10-30 sn sürebilir)");
+
+  var xhr = new XMLHttpRequest();
+  xhr.open("POST", "https://api.anthropic.com/v1/messages", true);
+  xhr.setRequestHeader("content-type", "application/json");
+  xhr.setRequestHeader("x-api-key", key);
+  xhr.setRequestHeader("anthropic-version", "2023-06-01");
+  xhr.setRequestHeader("anthropic-dangerous-direct-browser-access", "true");
+  xhr.onreadystatechange = function(){
+    if (xhr.readyState !== 4) return;
+    $("btnKontrol").disabled = false;
+    if (xhr.status === 200) {
+      try {
+        var data = JSON.parse(xhr.responseText);
+        var text = "";
+        for (var i = 0; i < data.content.length; i++) {
+          if (data.content[i].type === "text") text += data.content[i].text;
+        }
+        var obj = jsonAyikla(text);
+        if (obj) { durum($("durumApi"),"",""); goster(obj); }
+        else durum($("durumApi"),"hata","Cevap çözümlenemedi. Tekrar dene.");
+      } catch(e) {
+        durum($("durumApi"),"hata","Cevap okunamadı: " + e.message);
+      }
+    } else if (xhr.status === 401) {
+      durum($("durumApi"),"hata","API anahtarı geçersiz (401). Anahtarı kontrol et.");
+    } else if (xhr.status === 0) {
+      durum($("durumApi"),"hata","Bağlantı kurulamadı. İnternet var mı? (Bu mod çevrimiçi çalışır.)");
+    } else {
+      durum($("durumApi"),"hata","Sunucu hatası: " + xhr.status);
+    }
+  };
+  xhr.send(JSON.stringify({
+    model: "claude-sonnet-4-6",
+    max_tokens: 2500,
+    system: TALIMAT.replace(/Voici le journal :\n\n$/, "Voici le journal dans le message utilisateur."),
+    messages: [ { role: "user", content: metin } ]
+  }));
+}
+
+// ---------- Manuel mod ----------
+function promptHazirla(){
+  var metin = $("gunluk").value.replace(/^\s+|\s+$/g,"");
+  if (!metin) { durum($("durumManuel"),"hata","Önce günlüğünü yaz."); return; }
+  sonOrijinal = metin;
+  $("promptAlan").className = "";
+  var kutu = $("promptBox");
+  kutu.value = TALIMAT + metin;
+  // metni sec (iOS'ta kopyalamayi kolaylastirir)
+  kutu.focus();
+  try { kutu.setSelectionRange(0, kutu.value.length); } catch(e) {}
+  durum($("durumManuel"),"","");
+}
+
+function manuelGoster(){
+  var ham = $("cevapBox").value;
+  var obj = jsonAyikla(ham);
+  if (!obj) { durum($("durumManuel"),"hata","JSON çözümlenemedi. Claude'un cevabının tamamını (süslü parantezler dahil) yapıştırdığından emin ol."); return; }
+  durum($("durumManuel"),"","");
+  goster(obj);
+}
+
+// ---------- JSON ayıklama (```json ... ``` temizle) ----------
+function jsonAyikla(t){
+  if (!t) return null;
+  t = t.replace(/```json/g,"").replace(/```/g,"");
+  var a = t.indexOf("{");
+  var b = t.lastIndexOf("}");
+  if (a === -1 || b === -1 || b <= a) return null;
+  try { return JSON.parse(t.substring(a, b + 1)); } catch(e) { return null; }
+}
+
+// ---------- sonucu çiz ----------
+function goster(obj){
+  sonSonuc = obj;
+  var m = esc(obj.duzeltilmis || "");
+  m = m.replace(/\u00AB([^\u00BB]*)\u00BB/g, '<span class="err">$1</span>');
+  m = m.replace(/\n/g, "<br>");
+  $("sonucMetin").innerHTML = m;
+
+  var h = "";
+  var liste = obj.hatalar || [];
+  for (var i = 0; i < liste.length; i++) {
+    var x = liste[i];
+    h += '<div class="hata-item">'
+       + '<span class="yanlis">' + esc(x.orijinal || "") + '</span> &rarr; '
+       + '<span class="dogru">' + esc(x.dogru || "") + '</span>'
+       + '<div class="acik">' + esc(x.aciklama || "") + '</div>'
+       + '</div>';
+  }
+  if (liste.length === 0) h = '<div class="notlar">Hata bulunamadı — bravo !</div>';
+  $("hataListe").innerHTML = h;
+
+  if (obj.yorum) {
+    $("yorumKutu").className = "yorum-kutu";
+    $("yorumKutu").innerHTML = "<b>Genel değerlendirme:</b> " + esc(obj.yorum);
+  } else {
+    $("yorumKutu").className = "yorum-kutu gizli";
+  }
+
+  $("sonucKart").className = "card";
+  if ($("sonucKart").scrollIntoView) $("sonucKart").scrollIntoView();
+}
+
+// ---------- geçmiş ----------
+function kaydet(){
+  if (!sonOrijinal || !sonSonuc) return;
+  var ham = lsGet("gunluk_gecmis");
+  var arr = [];
+  try { arr = ham ? JSON.parse(ham) : []; } catch(e) { arr = []; }
+  var d = new Date();
+  var tarih = d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate();
+  arr.unshift({ t: tarih, o: sonOrijinal, s: sonSonuc });
+  if (arr.length > 60) arr = arr.slice(0, 60);
+  if (lsSet("gunluk_gecmis", JSON.stringify(arr))) gecmisCiz();
+  else alert("Bu tarayıcıda kayıt yapılamadı.");
+}
+
+function gecmisCiz(){
+  var ham = lsGet("gunluk_gecmis");
+  var arr = [];
+  try { arr = ham ? JSON.parse(ham) : []; } catch(e) { arr = []; }
+  if (arr.length === 0) { $("gecmisListe").innerHTML = '<div class="notlar">Henüz kayıt yok.</div>'; return; }
+  var h = "";
+  for (var i = 0; i < arr.length; i++) {
+    var oz = arr[i].o.substring(0, 60);
+    h += '<div class="gecmis-item">'
+       + '<div class="tarih">' + esc(arr[i].t) + '</div>'
+       + esc(oz) + '... '
+       + '<a href="javascript:void(0)" onclick="gecmisAc(' + i + ')">a&ccedil;</a>'
+       + '</div>';
+  }
+  $("gecmisListe").innerHTML = h;
+}
+
+function gecmisAc(i){
+  var ham = lsGet("gunluk_gecmis");
+  var arr = [];
+  try { arr = ham ? JSON.parse(ham) : []; } catch(e) { return; }
+  if (!arr[i]) return;
+  $("gunluk").value = arr[i].o;
+  sonOrijinal = arr[i].o;
+  sayacGuncelle();
+  goster(arr[i].s);
+}
+
+gecmisCiz();
+</script>
+</body>
+</html>
